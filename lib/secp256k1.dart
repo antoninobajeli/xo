@@ -34,12 +34,13 @@ AsymmetricKeyPair<PublicKey, PrivateKey> secp256k1KeyPair() {
   return generator.generateKeyPair();
 }
 
+
 Uint8List _seed() {
   var random = Random.secure();
   var seed = List<int>.generate(32, (_) => random.nextInt(256));
   return Uint8List.fromList(seed);
 }
-
+c
 
 
 // TODO
