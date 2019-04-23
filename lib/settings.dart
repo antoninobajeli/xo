@@ -6,8 +6,8 @@ import "package:pointycastle/pointycastle.dart";
 import "package:pointycastle/export.dart";
 import "package:pointycastle/ecc/api.dart";
 
-const String sharedPreferenceServerHost='server_host';
-const String defaultServerHostVal="hppt://localhost";
+const String sharedPreferenceRestApiSettingsKey='rest_api_settings';
+const String defaultRestApiAddress="http://192.168.254.101:8008";
 
 
 const String sharedPreferencePrivateKey='private_key';
@@ -38,7 +38,7 @@ class Settings {
     Future<SharedPreferences> prefsLoader = SharedPreferences.getInstance();
 
     prefsLoader.then((SharedPreferences sharePref) {
-      serverHost = (sharePref.getString(sharedPreferenceServerHost)?? defaultServerHostVal);
+      serverHost = (sharePref.getString(sharedPreferenceRestApiSettingsKey)?? defaultRestApiAddress);
       stateProvider.notify(ObserverAppState.INITED);
 
       privateKey = (sharePref.getString(sharedPreferencePrivateKey)?? getPrivateKey(sharePref,sharedPreferencePrivateKey));
@@ -76,17 +76,19 @@ class Settings {
     }
     _publicKey = keyPair.publicKey;
 
-    print(_publicKey.Q.x);
-    print(_publicKey.Q.y);
+    print("Encoded Public ${_publicKey.Q.getEncoded(false)}");
+
+    print("_publicKey.Q.x ${_publicKey.Q.x.toBigInteger().toRadixString(16)}");
+    print("_publicKey.Q.y ${_publicKey.Q.y.toBigInteger().toRadixString(16)}");
     String hexPublicKey=_publicKey.Q.x.toBigInteger().toRadixString(16)+_publicKey.Q.x.toBigInteger().toRadixString(16);
 
     prefs.setString(_sharedPreferenceKey, hexPublicKey);
     return hexPublicKey;
   }
 
-  Future<String> getServer() async {
+  Future<String> getRestApiUrl(String settingsKey,String urlDefaultValue) async {
     SharedPreferences sharePref = await SharedPreferences.getInstance();
-    String serverHost = (sharePref.getString(sharedPreferenceServerHost)?? defaultServerHostVal);
+    String serverHost = (sharePref.getString(settingsKey)?? urlDefaultValue);
     return serverHost;
   }
 

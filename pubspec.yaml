@@ -22,10 +22,13 @@ dependencies:
   connectivity: ^0.4.3
   shared_preferences: ^0.5.2
   pointycastle: ^1.0.1
+  jaguar_retrofit: ^2.8.6
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  jaguar_retrofit_gen:
+  build_runner:
 
 
 
